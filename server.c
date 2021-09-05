@@ -6,7 +6,7 @@
 /*   By: tnessrou <tnessrou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 20:28:27 by tnessrou          #+#    #+#             */
-/*   Updated: 2021/09/04 21:42:42 by tnessrou         ###   ########.fr       */
+/*   Updated: 2021/09/05 17:42:22 by tnessrou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	receiving_handler(int s, siginfo_t *info, void *meta)
 		ft_putchar_fd(g_binary.data, 1);
 		g_binary.data = 0;
 		g_binary.pow = 0;
-		if (kill(info->si_pid, SIGUSR1) == -1)
+		if (kill(info->si_pid, SIGUSR2) == -1)
 			raise_error("Receiving error\n");
 	}
 }
@@ -37,12 +37,12 @@ int	main(int argc, char **argv)
 	argv = NULL;
 	if (argc != 1)
 		raise_error("Check args\n");
-	ft_putstr_fd("Server is working\nPID=", 1);
+	ft_putstr_fd("Server is working\nPID= ", 1);
 	ft_putnbr_fd(getpid(), 1);
 	ft_putchar_fd('\n', 1);
 	g_binary.data = 0;
 	g_binary.pow = 0;
-	action.sa_flags = SIGINFO;
+	action.sa_flags = SA_SIGINFO;
 	action.sa_sigaction = receiving_handler;
 	if (sigaction(SIGUSR1, &action, NULL) == -1)
 		raise_error("Receiving error\n");
